@@ -1,0 +1,1133 @@
+# Death Stare — LIOS shared vanilla accept packs (prepend directed cowed +1000)
+# Footprint honesty: full redefine of listed scripted_modifier keys.
+religion_demand_conversion_default_modifier = {
+	# Death Stare directed Yes Man
+	ds_cowed_ai_accept_modifier = yes
+	opinion_modifier = {
+		opinion_target = scope:puppet_or_actor
+		who = scope:recipient
+		multiplier = {
+			value = 1
+			if = {
+				limit = {
+					scope:puppet_or_actor ?= {
+						has_government = landless_adventurer_government
+					}
+				}
+				add = -0.5
+			}
+		}
+	}
+
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_LEARNING
+		add = {
+			value = scope:puppet_or_actor.learning
+			subtract = scope:recipient.learning
+			if = {
+				limit = {
+					scope:puppet_or_actor.learning > scope:recipient.learning
+					scope:puppet_or_actor ?= {
+						has_government = landless_adventurer_government
+						has_perk = defender_of_the_faith_perk
+					}
+				}
+				multiply = 2
+			}
+		}
+	}
+
+	# Doubles a learning advantage only
+	modifier = {
+		desc = PAM_ACTS_CONVERSION_LEARNING_REASON
+		add = {
+			value = scope:puppet_or_actor.learning
+			subtract = scope:recipient.learning
+			min = 0
+		}
+		scope:puppet_or_actor ?= { rite = { rite_has_parameter = tenet_acts_of_apostles_conversion_learning } }
+	}
+
+	modifier = {
+		desc = SCHEME_WEAK_HOOK_USED
+		add = 50
+		scope:hook ?= yes
+	}
+	#Ecclesiastical Domicile Modifiers 
+	modifier = {
+		desc = ESTATE_INCREASE_CONVERSION_ACCEPTANCE
+		add = ecclesiastical_domicile_increase_conversion_acceptance_1
+		OR = {
+			scope:recipient.liege.domicile ?= { has_domicile_parameter = estate_increase_conversion_acceptance_1 }
+			scope:puppet_or_actor.domicile ?= { has_domicile_parameter = estate_increase_conversion_acceptance_1 }
+		}
+	}
+	modifier = {
+		desc = ESTATE_INCREASE_CONVERSION_ACCEPTANCE
+		add = ecclesiastical_domicile_increase_conversion_acceptance_2
+		OR = {
+			scope:recipient.liege.domicile ?= { has_domicile_parameter = estate_increase_conversion_acceptance_2 }
+			scope:puppet_or_actor.domicile ?= { has_domicile_parameter = estate_increase_conversion_acceptance_2 }
+		}
+	}
+	modifier = {
+		desc = ESTATE_INCREASE_CONVERSION_ACCEPTANCE
+		add = ecclesiastical_domicile_increase_conversion_acceptance_3
+		OR = {
+			scope:recipient.liege.domicile ?= { has_domicile_parameter = estate_increase_conversion_acceptance_3 }
+			scope:puppet_or_actor.domicile ?= { has_domicile_parameter = estate_increase_conversion_acceptance_3 }
+		}
+	}
+	ecclesiastical_domicile_cathedral_awe_modifier = yes
+	modifier = {
+		add = 10
+		desc = pam_patron_saint_paul_reason
+		scope:puppet_or_actor = { has_character_modifier = pam_patron_saint_paul }
+	}
+	modifier = {
+		desc = RELIGIOUS_HEAD_INTERACTION_SAVIOR
+		add = 30
+		scope:puppet_or_actor ?= {
+			has_trait = savior
+		}
+	}
+	modifier = {
+		desc = I_HAVE_HERALD_TRAIT
+		add = 75
+		scope:puppet_or_actor ?= {
+			has_trait = herald
+		}
+	}
+	modifier = {
+		desc = RELIGIOUS_HEAD_INTERACTION_DIVINE_BLOOD
+		add = 15
+		scope:puppet_or_actor ?= {
+			has_trait = divine_blood
+		}
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_IS_STUBBORN
+		add = -15
+		scope:recipient = {
+			has_trait = stubborn
+		}
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_IS_FICKLE
+		add = 10
+		scope:recipient = {
+			has_trait = fickle
+		}
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_IS_ZEALOUS
+		add = -100
+		scope:recipient = {
+			has_trait = zealous
+		}
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_IS_NOT_CYNICAL
+		add = -50
+		scope:puppet_or_actor ?= {
+			NAND = {
+				has_government = landless_adventurer_government
+				has_perk = defender_of_the_faith_perk
+			}
+		}
+		scope:recipient = {
+			NOR = {
+				has_trait = zealous
+				has_trait = cynical
+			}
+		}
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_IS_HERESIARCH
+		add = -100
+		scope:recipient = {
+			has_trait = heresiarch
+		}
+	}
+
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_FERVOR
+		scope:puppet_or_actor.faith.fervor != scope:recipient.faith.fervor
+		add = {
+			value = scope:puppet_or_actor.faith.fervor
+			subtract = scope:recipient.faith.fervor
+			if = {
+				limit = {
+					scope:puppet_or_actor ?= {
+						has_government = landless_adventurer_government
+					}
+				}
+				multiply = 0.5
+			}
+		}
+	}
+
+	# modifier = {
+	# 	desc = ASK_FOR_CONVERSION_TAQIYA
+	# 	trigger = {
+	# 		scope:recipient = {
+	# 			target_is_liege_or_above = scope:actor
+	# 		}
+	# 		scope:recipient.faith = {
+	# 			religion = religion:islam_religion
+	# 			has_doctrine_parameter = sanctioned_false_conversion
+	# 		}
+	# 	}
+	# 	add = -20
+	# }
+
+	# modifier = {
+	# 	desc = ASK_FOR_CONVERSION_SANCTIONED_FALSE_CONVERSION
+	# 	trigger = {
+	# 		scope:recipient = {
+	# 			target_is_liege_or_above = scope:actor
+	# 		}
+	# 		scope:recipient.faith = {
+	# 			NOT = { religion = religion:islam_religion }
+	# 			has_doctrine_parameter = sanctioned_false_conversion
+	# 		}
+	# 	}
+	# 	add = -20
+	# }
+
+	modifier = {
+		desc = ASK_FOR_CONVERSION_ADAPTIVENESS
+		trigger = {
+			scope:recipient = {
+				target_is_liege_or_above = scope:puppet_or_actor
+			}
+			scope:recipient.rite = {
+				rite_has_parameter = tenet_adaptive_conversion_resistance
+			}
+		}
+		add = -20
+	}
+
+	modifier = {
+		desc = ASK_FOR_CONVERSION_LITERALISM
+		trigger = {
+			scope:recipient = {
+				target_is_liege_or_above = scope:puppet_or_actor
+			}
+			scope:recipient.rite = {
+				rite_has_parameter = tenet_literalism_conversion_resistance
+			}
+		}
+		add = -20
+	}
+
+	modifier = {
+		desc = ASK_FOR_CONVERSION_LITERALISM_SCHOLAR
+		add = 20
+		scope:puppet_or_actor ?= {
+			has_personal_tenet_flag = tenet_literalism_scholar_conversion
+			has_trait = lifestyle_scholar
+		}
+	}
+
+	# Same-religion targets only
+	modifier = {
+		desc = ASK_FOR_CONVERSION_MONOPHYSITE_CONVICTION
+		add = 20
+		scope:puppet_or_actor ?= {
+			has_personal_tenet_flag = tenet_monophysitism_conversion_conviction
+		}
+		scope:recipient ?= {
+			NOT = { faith = scope:puppet_or_actor.faith }
+			faith.religion = scope:puppet_or_actor.faith.religion
+		}
+	}
+
+	modifier = {
+		desc = ASK_FOR_CONVERSION_DECLINING_IS_A_CRIME
+		trigger = {
+			scope:recipient = {
+				target_is_liege_or_above = scope:puppet_or_actor
+			}
+			scope:puppet_or_actor ?= {
+				refusing_conversion_is_crime_trigger = {
+					CHARACTER = scope:recipient
+				}
+			}
+		}
+		add = 50
+	}
+
+	modifier = {
+		add = intimidated_halved_reason_value
+		scope:puppet_or_actor ?= {
+			is_landless_adventurer = no
+		}
+		scope:recipient = {
+			has_dread_level_towards = {
+				target = scope:puppet_or_actor
+				level = 1
+			}
+		}
+		desc = INTIMIDATED_REASON
+	}
+	modifier = {
+		add = cowed_halved_reason_value
+		scope:puppet_or_actor ?= {
+			is_landless_adventurer = no
+		}
+		scope:recipient = {
+			has_dread_level_towards = {
+				target = scope:puppet_or_actor
+				level = 2
+			}
+		}
+		desc = COWED_REASON
+	}
+
+	modifier = {
+		add = 50
+		scope:recipient = {
+			dynasty ?= { has_dynasty_perk = fp1_adventure_legacy_3 }
+		}
+		desc = FP1_ADVENTURE_LEGACY_3_REASON
+	}
+
+	modifier = {
+		add = 20
+		scope:puppet_or_actor ?= {
+			dynasty ?= { has_dynasty_modifier = fp3_rekindler_of_iran_modifier }
+		}
+		desc = fp3_rekindler_of_iran_modifier_reason
+	}
+
+	modifier = { # Cultural Tradition, harder to convert
+		add = -50
+		scope:recipient = {
+			culture = {
+				has_cultural_parameter = harder_to_convert_character_faith
+			}
+		}
+		desc = CULTURE_HARD_TO_CONVERT_REASON
+	}
+	modifier = {
+		add = {
+			value = scope:recipient.piety_level
+			multiply = -10
+		}
+		scope:recipient = {
+			piety_level > 1
+		}
+		desc = ASK_FOR_CONVERSION_RECIPIENT_IS_PIOUS
+	}
+
+	modifier = {
+		add = -150
+		scope:recipient = {
+			government_allows = state_faith
+			top_liege = {
+				government_allows = state_faith
+				exists = primary_title.state_rite
+			}
+			rite = top_liege.primary_title.state_rite
+		}
+		desc = EP3_STATE_FAITH_CONVERSION
+	}
+	modifier = {
+		add = 100
+		scope:recipient = {
+			government_allows = state_faith
+			top_liege = {
+				government_allows = state_faith
+				exists = primary_title.state_rite
+			}
+			rite != top_liege.primary_title.state_rite
+		}
+		desc = EP3_STATE_FAITH_CONVERSION_NEG
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_CORONATION_BONUS
+		add = 25
+		scope:puppet_or_actor ?= {
+			has_character_flag = conversion_acceptance_bonus
+		}
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_CORONATION_BONUS
+		add = 10
+		scope:puppet_or_actor ?= {
+			has_character_flag = conversion_acceptance_bonus_low
+		}
+	}
+	modifier = {
+		add = 25
+		exists = scope:influence_send_option
+		scope:influence_send_option = yes
+		desc = INFLUENCE_INTERACTION_ACCEPTANCE_SEND_OPTION
+	}
+	modifier = {
+		desc = ASK_FOR_CONVERSION_RECIPIENT_WILL_NOT_ACCEPT
+		add = -1500
+		scope:recipient = {
+			has_character_flag = ai_will_not_convert
+		}
+	}
+
+	modifier = {
+		scope:puppet_or_actor ?= { government_has_flag = government_is_mandala }
+		add = 25
+		desc = ASK_FOR_CONVERSION_ACTOR_IS_MANDALA
+	}
+
+	modifier = {
+		scope:puppet_or_actor ?= { has_realm_law_flag = vassals_more_inclined_to_convert }
+		add = 25
+		desc = ASK_FOR_CONVERSION_ACTOR_HAS_REVERENCE_DECREE
+	}
+
+	modifier = {
+		scope:puppet_or_actor ?= { has_title = title:h_dar_al_islam }
+		scope:recipient = { faith.religion = religion:islam_religion }
+		add = 75
+		desc = ASK_FOR_CONVERSION_ACTOR_DAR_AL_ISLAM
+	}
+	modifier = {
+		add = spiritual_fulfillment_easier_conversion_value
+		desc = SPIRITUAL_FULFILLMENT_CONVERSION_REASON
+		scope:puppet_or_actor ?= {
+			has_fulfillment_parameter = sp_easier_conversion
+		}
+	}
+	modifier = {
+		add = spiritual_fulfillment_harder_conversion_value
+		desc = SPIRITUAL_FULFILLMENT_HARDER_CONVERSION_REASON
+		scope:puppet_or_actor ?= {
+			has_fulfillment_parameter = sp_harder_conversion
+		}
+	}
+}
+
+offer_vassalization_interaction_ai_acceptance_general = {
+	# Death Stare directed Yes Man
+	ds_cowed_ai_accept_modifier = yes
+	# MAIN
+	# Heretic/Infidel modifier.
+	# Tier difference modifier.
+	# Dejure modifier.
+	# Distant/Remote Realm modifier.
+
+	# MINOR
+	# Rivalry modifier.
+	# Same Dynasty modifier.
+	# Cultural/Cultural Group modifiers.
+	# Ageism modifier vs kids.
+	# Ruler Legitimacy modifier.
+	# Claimant modifier.
+	# FP3 Piety Level modifier.
+
+	# OPINION SCALES
+	# Dread
+	# Compare Opinion modifier.
+
+	offer_vassalization_interaction_ai_acceptance_bonus = yes
+	offer_vassalization_interaction_ai_acceptance_religion_and_culture = yes
+	offer_vassalization_interaction_ai_acceptance_relation = yes
+	offer_vassalization_interaction_ai_acceptance_diplomacy = yes
+
+	modifier = { #Vassal opinion
+		desc = offer_vassalization_interaction_aibehavior_vassal_opinion_tt
+		trigger = {
+			scope:actor = { number_of_powerful_vassals >= 1 }
+		}
+
+		add = {
+			value = 0
+			scope:actor = {
+				every_powerful_vassal = {
+					if = {
+						limit = {
+							save_temporary_opinion_value_as = {
+								name = vassal_opinion
+								target = scope:actor
+							}
+						}
+						add = scope:vassal_opinion
+					}
+				}
+
+				if = {
+					limit = {
+						number_of_powerful_vassals > 0
+					}
+					divide = number_of_powerful_vassals
+				}
+				else = {
+					divide = 5
+				}
+			}
+
+			divide = 5
+		}
+	}
+
+	modifier = { #Ageism modifier vs kids.
+		desc = offer_vassalization_interaction_aibehavior_child_tt
+		trigger = {
+			scope:actor = {
+				age < 12
+			}
+			scope:recipient = {
+				age > 16
+			}
+		}
+		add = -5
+	}
+
+	# INFLUENCE
+		modifier = {
+			add = 25
+			scope:influence_send_option ?= yes
+			desc = INFLUENCE_INTERACTION_ACCEPTANCE_SEND_OPTION
+		}
+
+		modifier = { #Bankrupt
+			desc = bankrupt_reason
+			trigger = {
+				scope:actor.gold <= -1
+			}
+			add = -100
+		}
+		#HISTORICALLY ADMIN PEOPLES WANT TO BE ADMIN
+		modifier = {
+			add = 30
+			scope:actor = {
+				government_has_mechanic = administrative
+			}
+			scope:recipient = {
+				culture = {
+					culture_is_historically_admin_trigger = yes
+				}
+			}
+
+			desc = "HISTORICAL_ADMIN_REASON"
+		}
+
+		modifier = { # AI-only weights, keep the pope from vassalizing too fast
+			trigger = {
+				exists = faith:catholic.religious_head
+				faith:catholic.religious_head = scope:actor
+				scope:actor = { is_ai = yes }
+			}
+			add = -50
+		}
+
+		modifier = { # A Spiritual Head of Faith of King rank or above will not put their see under a liege
+			desc = HEAD_OF_FAITH_REASON
+			trigger = {
+				scope:recipient = {
+					highest_held_title_tier >= tier_kingdom
+					faith = { has_doctrine_parameter = spiritual_head_of_faith }
+					faith.religious_head ?= this
+				}
+			}
+			add = -500
+		}
+
+		modifier = {
+			trigger = {
+				scope:actor = {
+					has_variable = severed_head_vassalization
+					var:severed_head_vassalization = {
+						this = scope:recipient
+					}
+				}
+			}
+			add = 200
+			desc = COWED_BY_SEVERED_HEAD_MODIFIER
+		}
+
+}
+
+negotiate_alliance_interaction_ai_acceptance = {
+	# Death Stare directed Yes Man
+	ds_cowed_ai_accept_modifier = yes
+	# Tier Differences
+	modifier = {
+		scope:actor = {
+			tier_difference = {
+				target = scope:recipient
+				value >= 1
+			}
+		}
+		add = {
+			value = 30
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = 2
+					}
+				}
+				add = 30
+			}
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = 3
+					}
+				}
+				add = 60
+			}
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = 4
+					}
+				}
+				add = 90
+			}
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = 5
+					}
+				}
+				add = 120
+			}
+		}
+		desc = RANK_DIFFERENCE_REASON
+	}
+	modifier = {
+		scope:actor = {
+			tier_difference = {
+				target = scope:recipient
+				value <= -1
+			}
+		}
+		add = {
+			value = -30
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = -2
+					}
+				}
+				add = -30
+			}
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = -3
+					}
+				}
+				add = -60
+			}
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = -4
+					}
+				}
+				add = -90
+			}
+			if = {
+				limit = {
+					tier_difference = {
+						target = scope:recipient
+						value = -5
+					}
+				}
+				add = -120
+			}
+		}
+		desc = RANK_DIFFERENCE_REASON
+	}
+	modifier = {
+		scope:recipient = {
+			has_relation_lover = scope:actor
+		}
+		add = {
+			value = 25
+		}
+		desc = WE_ARE_LOVERS
+	}
+	modifier = {
+		scope:recipient = {
+			has_relation_friend = scope:actor
+		}
+		add = {
+			value = 25
+		}
+		desc = WE_ARE_FRIENDS
+	}
+	opinion_modifier = { # More likely to accept if Recipient likes the Actor
+		who = scope:recipient
+		opinion_target = scope:actor
+		multiplier = 0.25
+		min = 0
+		desc = AI_OPINION_REASON
+	}
+	opinion_modifier = { # Less likely to accept if Recipient dislikes the Actor
+		who = scope:recipient
+		opinion_target = scope:actor
+		multiplier = 1
+		max = 0
+		desc = AI_OPINION_REASON
+	}
+
+	modifier = {
+		add = 20
+		scope:recipient = {
+			has_trait = loyal
+		}
+		desc = INTERACTION_LOYAL
+	}
+
+	modifier = {
+		add = 20
+		scope:recipient = {
+			has_trait = trusting
+		}
+		desc = INTERACTION_TRUSTING
+	}
+
+	modifier = {
+		add = 5
+		scope:recipient = {
+			has_trait = craven
+		}
+		desc = INTERACTION_CRAVEN
+	}
+
+	modifier = {
+		add = -20
+		scope:recipient = {
+			has_trait = paranoid
+		}
+		desc = INTERACTION_PARANOID
+	}
+
+	modifier = {
+		add = -20
+		scope:recipient = {
+			has_trait = arrogant
+		}
+		desc = INTERACTION_ARROGANT
+	}
+
+	modifier = {
+		add = -20
+		scope:recipient = {
+			has_trait = ambitious
+		}
+		desc = INTERACTION_AMBITIOUS
+	}
+
+	modifier = {
+		add = -40
+		scope:recipient = {
+			has_trait = disloyal
+		}
+		desc = INTERACTION_DISLOYAL
+	}
+
+	modifier = {
+		add = -10
+		scope:recipient = {
+			has_trait = fickle
+		}
+		desc = INTERACTION_FICKLE
+	}
+
+	# Rivalry
+	modifier = { # Say no to rivals
+		add = -100
+		scope:recipient = {
+			has_relation_rival = scope:actor
+			NOT = { has_relation_nemesis = scope:actor }
+		}
+		desc = "ACTOR_RIVAL_TO_ME_REASON"
+	}
+	modifier = { # Say no to nemesis
+		add = -300
+		scope:recipient = {
+			has_relation_nemesis = scope:actor
+		}
+		desc = "ACTOR_NEMESIS_TO_ME_REASON"
+	}
+
+	# Dynasty Prestige Levels
+	modifier = {
+		add = -5
+		desc = AI_DYNASTY_PRESTIGE_REASON
+		scope:actor = { has_dynasty = yes }
+		scope:actor.dynasty != scope:recipient.dynasty
+		scope:actor.dynasty = { dynasty_prestige_level = 0 }
+	}
+	modifier = {
+		desc = AI_DYNASTY_PRESTIGE_REASON
+		scope:actor = { has_dynasty = yes }
+		scope:actor.dynasty != scope:recipient.dynasty
+		scope:actor.dynasty = { dynasty_prestige_level >= 2 }
+		add = {
+			value = 10
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 3 }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 4 }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 5 }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 6 }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 7 }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 8 }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 9 }
+				}
+				add = 5
+			}
+			if = {
+				limit = {
+					scope:actor.dynasty = { dynasty_prestige_level >= 10 }
+				}
+				add = 5
+			}
+		}
+	}
+	modifier = { #Faith compatibility
+		scope:recipient.rite = {
+			rite_hostility_level = {
+				target = scope:actor.rite
+				value > faith_fully_accepted_level
+			}
+		}
+		NOT = {
+			scope:recipient.ai_zeal <= -50
+		}
+		add = {
+			value = -10
+			if = {
+				limit = {
+					# Exempt certain struggle phases.
+					NOT = { is_struggle_parameter_active_interfaith_marriages_available_between_involved_characters_trigger = yes }
+				}
+				if = {
+					limit = {
+						scope:recipient.rite = {
+							rite_hostility_level = {
+								target = scope:actor.rite
+								value >= faith_astray_level
+							}
+						}
+					}
+					subtract = 20
+				}
+				if = {
+					limit = {
+						scope:recipient.rite = {
+							rite_hostility_level = {
+								target = scope:actor.rite
+								value >= faith_hostile_level
+							}
+						}
+					}
+					subtract = 20
+				}
+				if = {
+					limit = {
+						scope:recipient.rite = {
+							rite_hostility_level = {
+								target = scope:actor.rite
+								value >= faith_evil_level
+							}
+						}
+					}
+					subtract = 50
+				}
+				if = {
+					limit = {
+						scope:recipient.ai_zeal <= -25
+					}
+					divide = 2
+				}
+				else_if = {
+					limit = {
+						scope:recipient.ai_zeal >= 50
+					}
+					multiply = 2
+				}
+				if = {
+					limit = {
+						scope:recipient.rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+					}
+					divide = 2
+				}
+			}
+		}
+		desc = MARRY_DIFFERENT_FAITH_REASON
+	}
+
+	modifier = { # A Recipient is more likely to agree to an alliance requested by his liege.
+		add = 20
+		scope:recipient = {
+			target_is_liege_or_above = scope:actor
+		}
+		desc = LIEGE_REASON
+	}
+
+	modifier = {
+		add = {
+			value = 1
+			subtract = {
+				value = scope:recipient.max_military_strength # For foreign diplomacy, consider recipients max
+				divide = { value = scope:actor.current_military_strength min = 1 }
+			}
+			multiply = 20
+			min = -1000
+			max = 100
+		}
+		desc = AI_MILITARY_BALANCE_REASON
+	}
+	# Recipient is a Claimant to Actor's titles.
+	modifier = {
+		scope:recipient = {
+			any_claim = {
+				holder = scope:actor
+			}
+			NOR = {
+				is_heir_of = scope:actor
+				ai_greed <= -25
+			}
+		}
+		add = {
+			value = -50
+			if = {
+				limit = {
+					scope:recipient.ai_greed >= 25
+				}
+				add = ai_greed
+			}
+			if = {
+				limit = {
+					scope:recipient.house != scope:actor.house
+				}
+				multiply = 2
+			}
+		}
+		desc = IS_CLAIMANT_TO_ACTORS_TITLES
+	}
+	modifier = {
+		scope:actor = {
+			any_claim = {
+				holder = scope:recipient
+			}
+		}
+		add = 25
+		desc = IS_CLAIMANT_TO_RECIPIENT_TITLES
+	}
+	modifier = {
+		scope:recipient = {
+			NOT = {
+				any_claim = {
+					holder = scope:actor
+				}
+			}
+		}
+		scope:recipient.house = scope:actor.house
+		add = 15
+		desc = IS_SAME_HOUSE_REASON
+	}
+	modifier = {
+		scope:recipient = {
+			has_opinion_modifier = {
+				target = scope:actor
+				modifier = declared_war
+			}
+		}
+		add = -100
+		desc = DECLARED_WAR_REASON
+	}
+
+	# Don't form new alliances with people already at war.
+	modifier = {
+		scope:actor = {
+			is_at_war = yes
+
+			# Since vassals and lieges can't call us into wars, this doesn't matter for us if we have that relationship.
+			NOR = {
+				target_is_liege_or_above = scope:recipient
+				target_is_vassal_or_below = scope:recipient
+			}
+		}
+		add = -50
+		desc = IS_AT_WAR_REASON
+	}
+
+	#Bonus from Tradition Astute Diplomats
+	modifier = {
+		scope:actor.culture = { has_cultural_parameter = facilitate_alliance_acceptance }
+		add = 50 #should be in a file 00_traditions_values
+		desc = TRADITION_ASTUTE_DIPLOMATS_ACCEPTANCE_MODIFIER
+	}
+
+	# The AI doesn't want to form alliances with AI vassals within its capital duchy, so it can revoke them
+	modifier = {
+		scope:actor = {
+			is_ai = yes
+			is_vassal_or_below_of = scope:recipient
+			any_held_title = {
+				title_tier = county
+				de_jure_liege = scope:actor.primary_title.title_capital_county.de_jure_liege
+			}
+		}
+		scope:recipient = {
+			is_ai = yes
+		}
+		add = -5000
+	}
+
+	# Feud
+	modifier = {
+		add = -25
+		scope:recipient = {
+			house_has_feud_relation_with_trigger = { TARGET = scope:actor }
+		}
+		desc = MARRY_FAMILY_FEUD_REASON
+	}
+
+	# Existing Alliances
+	modifier = {
+		add = {
+			scope:actor = {
+				every_ally = {
+					add = -15
+				}
+			}
+		}
+		scope:actor = {
+			any_ally = {
+				count >= 2
+			}
+		}
+		NOT = {
+			scope:recipient = {
+				government_has_flag = government_is_clan
+				is_vassal_or_below_of = scope:actor
+			}
+		}
+		desc = EXISTING_ALLIANCES_REASON
+	}
+
+	# Existing Alliances
+	modifier = {
+		add = {
+			scope:recipient = {
+				every_ally = {
+					add = -15
+				}
+			}
+		}
+		scope:recipient = {
+			any_ally = {
+				count >= 2
+			}
+		}
+		NOT = {
+			scope:recipient = {
+				government_has_flag = government_is_clan
+				is_vassal_or_below_of = scope:actor
+			}
+		}
+		desc = THEIR_EXISTING_ALLIANCES_REASON
+	}
+
+	modifier = {
+		add = intimidated_reason_value
+		scope:recipient = {
+			target_is_liege_or_above = scope:actor
+			has_dread_level_towards = {
+				target = scope:actor
+				level = 1
+			}
+		}
+		desc = INTIMIDATED_REASON
+	}
+	modifier = {
+		add = cowed_reason_value
+		scope:recipient = {
+			target_is_liege_or_above = scope:actor
+			has_dread_level_towards = {
+				target = scope:actor
+				level = 2
+			}
+		}
+		desc = COWED_REASON
+	}
+
+	modifier = {
+		add = intimidated_external_reason_value
+		scope:recipient = {
+			NOT = { target_is_liege_or_above = scope:actor }
+			has_dread_level_towards = {
+				target = scope:actor
+				level = 1
+			}
+		}
+		desc = INTIMIDATED_REASON
+	}
+	modifier = {
+		add = cowed_external_reason_value
+		scope:recipient = {
+			NOT = { target_is_liege_or_above = scope:actor }
+			has_dread_level_towards = {
+				target = scope:actor
+				level = 2
+			}
+		}
+		desc = COWED_REASON
+	}
+
+	# INFLUENCE
+	modifier = {
+		desc = INFLUENCE_REASON
+		scope:influence ?= yes
+		add = {
+			value = 10
+			multiply = scope:actor.influence_level
+			min = 5
+		}
+	}
+}

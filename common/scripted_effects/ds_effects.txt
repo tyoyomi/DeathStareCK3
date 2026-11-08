@@ -1,0 +1,119 @@
+# Death Stare — scripted effects
+
+ds_clear_cowed_effect = {
+	# this = cowed character
+	remove_character_modifier = ds_cowed_modifier
+	remove_variable = ds_cowed_by
+	remove_character_flag = ds_is_cowed
+}
+
+ds_apply_cowed_effect = {
+	# this = recipient; scope:ds_intimidator = actor who stared
+	ds_clear_cowed_effect = yes
+	set_variable = {
+		name = ds_cowed_by
+		value = scope:ds_intimidator
+	}
+	add_character_flag = ds_is_cowed
+	if = {
+		limit = { has_game_rule = ds_rule_cowed_duration_1y }
+		add_character_modifier = {
+			modifier = ds_cowed_modifier
+			years = 1
+		}
+	}
+	else_if = {
+		limit = { has_game_rule = ds_rule_cowed_duration_3y }
+		add_character_modifier = {
+			modifier = ds_cowed_modifier
+			years = 3
+		}
+	}
+	else = {
+		add_character_modifier = {
+			modifier = ds_cowed_modifier
+			years = 2
+		}
+	}
+	if = {
+		limit = { has_game_rule = ds_rule_fear_opinion_yes }
+		add_opinion = {
+			target = scope:ds_intimidator
+			modifier = ds_cowed_fear_opinion
+		}
+	}
+	# Toast for player intimidator
+	save_scope_as = ds_cowed_target
+	scope:ds_intimidator = {
+		send_interface_toast = {
+			type = event_toast_effect_good
+			title = ds_toast_cowed_title
+			left_icon = scope:ds_cowed_target
+			custom_tooltip = ds_toast_cowed_desc
+		}
+	}
+}
+
+ds_death_stare_on_accept_effect = {
+	# Interaction scopes: actor / recipient
+	scope:actor = { save_scope_as = ds_intimidator }
+	scope:recipient = {
+		ds_apply_cowed_effect = yes
+	}
+	# Mild global cooldown on actor so re-stares stay snappy but not spammy
+	scope:actor = {
+		add_character_flag = {
+			flag = ds_stare_global_cooldown
+			days = ds_stare_global_cooldown_days
+		}
+	}
+}
+
+### Government force (mirror vanilla liege-convert decision effects; costs skipped by design force verb)
+
+ds_force_government_change_effect = {
+	# Interaction scopes: actor / recipient. Tribal path uses hidden event so root = vassal.
+	if = {
+		limit = { ds_recipient_can_force_feudal_from_tribal_trigger = yes }
+		scope:recipient = {
+			trigger_event = ds_events.1001
+		}
+	}
+	else_if = {
+		limit = { ds_recipient_can_force_clan_to_feudal_trigger = yes }
+		scope:recipient = {
+			change_government = feudal_government
+			hidden_effect = {
+				every_vassal_or_below = {
+					limit = { government_has_flag = government_is_clan }
+					change_government = feudal_government
+					trigger_event = {
+						id = major_decisions.0002
+						days = 3
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { ds_recipient_can_force_feudal_to_clan_trigger = yes }
+		scope:recipient = {
+			change_government = clan_government
+			hidden_effect = {
+				every_vassal_or_below = {
+					limit = { government_has_flag = government_is_feudal }
+					change_government = clan_government
+					trigger_event = {
+						id = major_decisions.0002
+						days = 3
+					}
+				}
+			}
+		}
+	}
+}
+
+# Pending fold — engine has no reliable Accept-pending API in 1.20; kept as no-op stub
+ds_force_pending_fold_effect = {
+	custom_tooltip = ds_tt_pending_fold_unsupported
+}

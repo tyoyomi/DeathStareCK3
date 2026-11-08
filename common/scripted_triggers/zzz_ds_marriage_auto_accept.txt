@@ -1,0 +1,74 @@
+# Death Stare — LIOS marriage_interaction_auto_accept_trigger
+# Directed cowed auto-accepts marriage without hook.
+
+marriage_interaction_auto_accept_trigger = {
+	trigger_if = {
+		limit = {
+			ds_cowed_auto_accept_trigger = yes
+		}
+		custom_description = {
+			text = ds_cowed_auto_accept_reason
+			subject = scope:actor
+			object = scope:recipient
+			always = yes
+		}
+	}
+	trigger_else_if = {
+		limit = {
+			exists = scope:secondary_actor.betrothed
+			scope:secondary_actor = {
+				has_been_promised_grand_wedding = yes
+			}
+		}
+		always = no
+	}
+	trigger_else_if = {
+		limit = {
+			exists = scope:secondary_actor.betrothed
+		}
+		custom_description = {
+			text = is_betrothed_auto_accept
+			subject = scope:secondary_actor
+			object = scope:secondary_recipient
+			scope:secondary_actor.betrothed = scope:secondary_recipient
+		}
+	}
+	trigger_else_if = {
+		limit = {
+			scope:hook = yes
+		}
+		#Strong hook = 100% accept (unless marrying 1st or 2nd player heir or the ruler and asking for matrilineal/partrilineal resulting in no dynasty children for them)
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:puppet_or_actor
+			object = scope:recipient
+			scope:puppet_or_actor = { has_strong_hook = scope:recipient }
+			scope:recipient = {
+				NAND = {
+					#Secondary recipient can't be recipient or 1st/2nd heir...
+					OR = {
+						this = scope:secondary_recipient
+						player_heir_position  = {
+							target = scope:secondary_recipient
+							value <= 2
+						}
+					}
+					#...if the marriage (matrilineal/patrilineal) does not match their gender
+					OR = {
+						scope:secondary_recipient = {
+							is_female = yes
+							NOT = { always = scope:matrilineal }
+						}
+						scope:secondary_recipient = {
+							is_male = yes
+							always = scope:matrilineal
+						}
+					}
+				}
+			}
+		}
+	}
+	trigger_else = {
+		always = no
+	}
+}

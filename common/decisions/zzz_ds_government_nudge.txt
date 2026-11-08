@@ -1,0 +1,299 @@
+# Death Stare — LIOS government convert decisions (AI nudge while cowed by liege)
+# Force verb lives in ds_death_stare.txt; these only boost ai_will_do.
+
+# LIOS: convert_to_feudalism_liege_converted_decision
+convert_to_feudalism_liege_converted_decision = {
+	picture = {
+		trigger = {
+			has_tgp_dlc_trigger = yes
+			liege = {
+				culture = { has_cultural_pillar = heritage_japonic }
+			}
+		}
+		reference = "gfx/interface/illustrations/decisions/tgp_dominance.dds"
+	}
+	picture = {
+		trigger = {
+			liege = {
+				government_has_flag = government_is_clan
+			}
+		}
+		reference = "gfx/interface/illustrations/event_scenes/bp1_courtyard_mena.dds"
+	}
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_realm.dds"
+	}
+	decision_group_type = major
+	desc = convert_to_feudalism_liege_converted_decision_desc
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+
+	is_shown = {
+		government_has_flag = government_is_tribal
+		liege ?= {
+			OR = {
+				government_has_flag = government_is_feudal
+				government_has_flag = government_is_clan
+				government_has_flag = government_is_japan_feudal
+			}
+		}
+	}
+
+	is_valid = {
+		OR = {
+			has_realm_law = tribal_authority_1
+			has_realm_law = tribal_authority_2
+			has_realm_law = tribal_authority_3
+		}
+		custom_description = {
+			text = faith_is_reformed
+			subject = root
+			faith = { NOT = { has_doctrine_parameter = unreformed } }
+		}
+		trigger_if = {
+			limit = { government_has_flag = government_is_wanua }
+			faith = { has_doctrine = doctrine_monotheist }
+		}
+		custom_description = {
+			text = recent_conversion_to_tribalism
+			NOT = { has_character_flag = just_converted_to_tribalism }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		custom_tooltip = {
+			text = permafrost_feudal_ban
+			NOT = { culture = { has_cultural_parameter = permafrost_cannot_become_feudal } }
+		}
+	}
+
+	cost = {
+		prestige = 150
+	}
+
+	effect = {
+		trigger_event = major_decisions.0001
+		save_scope_as = actor
+		convert_whole_realm_to_feudalism_effect = yes
+		hidden_effect = {
+			every_vassal = {
+				trigger_event = {
+					id = major_decisions.0002
+					days = 3
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		always = yes
+	}
+
+	ai_will_do = {
+		# Death Stare: cowed-by-liege AI nudge toward eligible government convert
+		modifier = {
+			add = ds_gov_nudge_ai_will_do
+			desc = ds_gov_nudge_reason
+			has_game_rule = ds_rule_government_nudge_on
+			ds_cowed_by_liege_trigger = yes
+		}
+		base = 100
+	}
+}
+
+# LIOS: convert_clan_to_feudalism_through_liege_decision
+convert_clan_to_feudalism_through_liege_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_realm.dds"
+	}
+	decision_group_type = major
+	desc = convert_clan_to_feudalism_through_liege_decision_desc
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+
+	is_shown = {
+		government_has_flag = government_is_clan
+		liege ?= {
+			government_has_flag = government_is_feudal
+		}
+		top_liege != this
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = same_faith_as_liege
+			OR = {
+				religion = liege.religion
+				faith = {
+					faith_hostility_level = {
+						target = root.liege.faith
+						value <= faith_fully_accepted_level
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = same_culture_as_liege
+			OR = {
+				culture = liege.culture
+				culture = {
+					cultural_acceptance = { target = root.liege.culture value >= 90 } # Essentially the same culture
+				}
+			}
+		}
+	}
+
+	cost = {
+		prestige = 150
+	}
+
+	effect = {
+		trigger_event = major_decisions.0001
+		save_scope_as = actor
+
+		change_government = feudal_government
+
+		hidden_effect = {
+			every_vassal_or_below = {
+				limit = { government_has_flag = government_is_clan }
+				change_government = feudal_government
+				trigger_event = {
+					id = major_decisions.0002
+					days = 3
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		prestige >= 150
+	}
+
+	ai_will_do = {
+		# Death Stare: cowed-by-liege AI nudge toward eligible government convert
+		modifier = {
+			add = ds_gov_nudge_ai_will_do
+			desc = ds_gov_nudge_reason
+			has_game_rule = ds_rule_government_nudge_on
+			ds_cowed_by_liege_trigger = yes
+		}
+		base = 0
+
+		modifier = {
+			add = 100
+			opinion = {
+				target = liege
+				value >= 0
+			}
+		}
+	}
+}
+
+# LIOS: convert_feudalism_to_clan_through_liege_decision
+convert_feudalism_to_clan_through_liege_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_realm.dds"
+	}
+	decision_group_type = major
+	desc = convert_feudalism_to_clan_through_liege_decision_desc
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+
+	is_shown = {
+		government_has_flag = government_is_feudal
+		top_liege != this
+		liege ?= {
+			government_has_flag = government_is_clan
+		}
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = same_faith_as_liege
+			OR = {
+				religion = liege.religion
+				faith = {
+					faith_hostility_level = {
+						target = root.liege.faith
+						value <= faith_fully_accepted_level
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = same_culture_as_liege
+			OR = {
+				culture = liege.culture
+				culture = {
+					cultural_acceptance = { target = root.liege.culture value >= 90 } # Essentially the same culture
+				}
+			}
+		}
+	}
+
+	cost = {
+		prestige = 150
+	}
+
+	effect = {
+		trigger_event = major_decisions.0001
+		save_scope_as = actor
+
+		change_government = clan_government
+
+		hidden_effect = {
+			every_vassal_or_below = {
+				limit = { government_has_flag = government_is_feudal }
+				change_government = clan_government
+				trigger_event = {
+					id = major_decisions.0002
+					days = 3
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		prestige >= 150
+	}
+
+	ai_will_do = {
+		# Death Stare: cowed-by-liege AI nudge toward eligible government convert
+		modifier = {
+			add = ds_gov_nudge_ai_will_do
+			desc = ds_gov_nudge_reason
+			has_game_rule = ds_rule_government_nudge_on
+			ds_cowed_by_liege_trigger = yes
+		}
+		base = 0
+
+		modifier = {
+			add = 100
+			opinion = {
+				target = liege
+				value >= 0
+			}
+		}
+	}
+}

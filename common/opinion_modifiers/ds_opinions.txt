@@ -1,0 +1,7 @@
+# Death Stare — mild fear bruise (optional flavor)
+
+ds_cowed_fear_opinion = {
+	opinion = -10
+	monthly_change = 0.5
+	decaying = yes
+}

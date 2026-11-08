@@ -1,0 +1,82 @@
+# Death Stare — light rules only (no manage hub)
+
+ds_rule_target_scope = {
+	categories = {
+		tweaks
+	}
+
+	default = ds_rule_target_vassals
+
+	ds_rule_target_vassals = {
+	}
+
+	ds_rule_target_realm = {
+		flag = blocks_achievements
+	}
+}
+
+ds_rule_cowed_duration = {
+	categories = {
+		tweaks
+	}
+
+	default = ds_rule_cowed_duration_2y
+
+	ds_rule_cowed_duration_1y = {
+	}
+
+	ds_rule_cowed_duration_2y = {
+	}
+
+	ds_rule_cowed_duration_3y = {
+		flag = blocks_achievements
+	}
+}
+
+ds_rule_fear_opinion = {
+	categories = {
+		tweaks
+	}
+
+	default = ds_rule_fear_opinion_yes
+
+	ds_rule_fear_opinion_yes = {
+	}
+
+	ds_rule_fear_opinion_no = {
+	}
+}
+
+ds_rule_government_force = {
+	categories = {
+		tweaks
+	}
+
+	default = ds_rule_government_force_cowed
+
+	ds_rule_government_force_cowed = {
+		flag = blocks_achievements
+	}
+
+	ds_rule_government_force_always_show = {
+		flag = blocks_achievements
+	}
+
+	ds_rule_government_force_off = {
+	}
+}
+
+ds_rule_government_nudge = {
+	categories = {
+		tweaks
+	}
+
+	default = ds_rule_government_nudge_on
+
+	ds_rule_government_nudge_on = {
+		flag = blocks_achievements
+	}
+
+	ds_rule_government_nudge_off = {
+	}
+}

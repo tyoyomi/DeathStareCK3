@@ -1,0 +1,9 @@
+# Death Stare — shared ai_accept pack (+1000 when directed-cowed)
+
+ds_cowed_ai_accept_modifier = {
+	modifier = {
+		add = ds_cowed_ai_accept_bonus
+		desc = ds_cowed_ai_accept_reason
+		ds_cowed_auto_accept_trigger = yes
+	}
+}

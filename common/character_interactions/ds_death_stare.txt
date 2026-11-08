@@ -1,0 +1,126 @@
+# Death Stare — player intimidation verb (+ government force; pending fold hidden)
+
+ds_death_stare_interaction = {
+	category = interaction_category_hostile
+	icon = ds_death_stare
+	interface_priority = 80
+	common_interaction = yes
+
+	desc = ds_death_stare_interaction_desc
+
+	auto_accept = yes
+
+	is_shown = {
+		ds_actor_is_player_trigger = yes
+		ds_stare_target_allowed_trigger = yes
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			custom_tooltip = {
+				text = ds_tt_stare_ready
+				NOT = { has_character_flag = ds_stare_global_cooldown }
+			}
+		}
+		scope:recipient = {
+			custom_tooltip = {
+				text = ds_tt_valid_stare_target
+				ds_stare_target_allowed_trigger = yes
+			}
+		}
+	}
+
+	on_accept = {
+		ds_death_stare_on_accept_effect = yes
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+# Secondary verb: force eligible government convert while cowed (or as follow-up after stare)
+ds_force_government_change_interaction = {
+	category = interaction_category_vassal
+	icon = ds_death_stare
+	interface_priority = 79
+	common_interaction = yes
+
+	desc = ds_force_government_change_interaction_desc
+
+	auto_accept = yes
+
+	is_shown = {
+		NOT = { has_game_rule = ds_rule_government_force_off }
+		ds_actor_is_player_trigger = yes
+		scope:recipient = {
+			is_alive = yes
+			is_landed = yes
+			is_vassal_of = scope:actor
+		}
+		OR = {
+			ds_recipient_cowed_by_actor_trigger = yes
+			has_game_rule = ds_rule_government_force_always_show
+		}
+		ds_recipient_eligible_government_force_trigger = yes
+	}
+
+	is_valid_showing_failures_only = {
+		custom_tooltip = {
+			text = ds_tt_must_be_cowed_for_gov
+			OR = {
+				ds_recipient_cowed_by_actor_trigger = yes
+				has_game_rule = ds_rule_government_force_always_show
+			}
+		}
+		custom_tooltip = {
+			text = ds_tt_gov_force_eligible
+			ds_recipient_eligible_government_force_trigger = yes
+		}
+	}
+
+	on_accept = {
+		ds_force_government_change_effect = yes
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_good
+				title = ds_toast_gov_force_title
+				left_icon = scope:recipient
+				custom_tooltip = ds_toast_gov_force_desc
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+# Pending fold — hidden in v0.1.0 (no reliable Accept-pending script API on 1.20)
+ds_force_pending_fold_interaction = {
+	category = interaction_category_hostile
+	icon = ds_death_stare
+	interface_priority = 78
+	common_interaction = yes
+	hidden = yes
+
+	desc = ds_force_pending_fold_interaction_desc
+
+	auto_accept = yes
+
+	is_shown = {
+		always = no
+	}
+
+	is_valid_showing_failures_only = {
+		always = no
+	}
+
+	on_accept = {
+		ds_force_pending_fold_effect = yes
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}

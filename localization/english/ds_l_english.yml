@@ -1,0 +1,72 @@
+﻿l_english:
+ # Interactions
+ ds_death_stare_interaction:0 "Death Stare"
+ ds_death_stare_interaction_desc:0 "Lock eyes with [recipient.GetShortUIName] until their will folds. They become briefly #bold Cowed#! — a Yes Man toward #bold you only#!. While Cowed, common asks (convert, marry, call to war, ally, vassalize) accept at once with #bold no gold or hook#! needed. Re-send any open ask after the stare if it was already pending.\n\nGovernment change is not a normal ask — use #bold Force Government Change#! while they are Cowed (tribal/clan/feudal liege-convert cases)."
+ ds_death_stare_interaction_extra_icon:0 "$ds_death_stare_interaction$"
+
+ ds_force_government_change_interaction:0 "Force Government Change"
+ ds_force_government_change_interaction_desc:0 "While [recipient.GetShortUIName] is Cowed by your Death Stare (or when the game rule allows), force an eligible government shift that would normally be #italic their#! decision — tribal→feudal/clan through liege, or clan↔feudal through liege. This is a Death Stare verb, not a silent rewrite of every government decision.\n\nVanilla prestige costs are skipped by this force; validity gates (authority, reformed faith, culture/faith closeness) still apply."
+ ds_force_government_change_interaction_extra_icon:0 "$ds_force_government_change_interaction$"
+
+ ds_force_pending_fold_interaction:0 "Force Pending Fold"
+ ds_force_pending_fold_interaction_desc:0 "Engine limit: Crusader Kings III 1.20 has no reliable script API to Accept an arbitrary pending diplomatic item for another character. This option is hidden in 0.1.0. Re-send the ask after Death Stare — curated asks auto-accept while Cowed."
+
+ # Modifier
+ ds_cowed_modifier:0 "Cowed"
+ ds_cowed_modifier_desc:0 "Terrified into Yes Man obedience toward the character who Death Stared them. Common asks from that intimidator auto-accept — third parties still face normal acceptance."
+
+ # Opinion
+ ds_cowed_fear_opinion:0 "Death Stare"
+
+ # Auto-accept / AI reasons
+ ds_cowed_auto_accept_reason:0 "Cowed by Death Stare"
+ ds_cowed_ai_accept_reason:0 "Cowed by Death Stare"
+ ds_gov_nudge_reason:0 "Cowed by liege's Death Stare"
+
+ # Tooltips
+ ds_tt_stare_ready:0 "You are not on Death Stare cooldown"
+ ds_tt_valid_stare_target:0 "Valid Death Stare target (vassal, or realm character if the game rule widens scope)"
+ ds_tt_must_be_cowed_for_gov:0 "Target is Cowed by your Death Stare (or government-force rule allows always)"
+ ds_tt_gov_force_eligible:0 "Eligible for a liege-convert government change (tribal→feudal/clan, clan→feudal, or feudal→clan)"
+ ds_tt_pending_fold_unsupported:0 "Pending Accept is not supported by script on this game version — re-send the ask while Cowed instead"
+
+ # Toasts
+ ds_toast_cowed_title:0 "Death Stare"
+ ds_toast_cowed_desc:0 "[root.GetShortUIName] is Cowed — a Yes Man toward you for a short while. Make your asks; no gold or hook needed on curated interactions."
+ ds_toast_gov_force_title:0 "Government Forced"
+ ds_toast_gov_force_desc:0 "[recipient.GetShortUIName] adopts your realm's ways under the weight of your Death Stare."
+
+ # Game rules
+ rule_ds_rule_target_scope:0 "Death Stare Targets"
+ setting_ds_rule_target_vassals:0 "Direct Vassals"
+ setting_ds_rule_target_vassals_desc:0 "Death Stare can only be used on your direct landed vassals."
+ setting_ds_rule_target_realm:0 "Realm Characters"
+ setting_ds_rule_target_realm_desc:0 "Death Stare can target vassals, courtiers, and other characters in your realm. Blocks achievements."
+
+ rule_ds_rule_cowed_duration:0 "Death Stare Cowed Duration"
+ setting_ds_rule_cowed_duration_1y:0 "1 Year"
+ setting_ds_rule_cowed_duration_1y_desc:0 "Cowed lasts 1 year (refresh on re-stare)."
+ setting_ds_rule_cowed_duration_2y:0 "2 Years"
+ setting_ds_rule_cowed_duration_2y_desc:0 "Cowed lasts 2 years (default)."
+ setting_ds_rule_cowed_duration_3y:0 "3 Years"
+ setting_ds_rule_cowed_duration_3y_desc:0 "Cowed lasts 3 years. Blocks achievements."
+
+ rule_ds_rule_fear_opinion:0 "Death Stare Fear Opinion"
+ setting_ds_rule_fear_opinion_yes:0 "Mild Fear"
+ setting_ds_rule_fear_opinion_yes_desc:0 "Stared targets gain a small decaying negative opinion toward you."
+ setting_ds_rule_fear_opinion_no:0 "No Opinion Hit"
+ setting_ds_rule_fear_opinion_no_desc:0 "Death Stare applies no opinion penalty."
+
+ rule_ds_rule_government_force:0 "Death Stare Government Force"
+ setting_ds_rule_government_force_cowed:0 "While Cowed"
+ setting_ds_rule_government_force_cowed_desc:0 "Force Government Change shows only on targets you have Cowed. Blocks achievements."
+ setting_ds_rule_government_force_always_show:0 "Always When Eligible"
+ setting_ds_rule_government_force_always_show_desc:0 "Force Government Change shows whenever the vassal is eligible, even without Cowed. Blocks achievements."
+ setting_ds_rule_government_force_off:0 "Disabled"
+ setting_ds_rule_government_force_off_desc:0 "Hide the Force Government Change interaction."
+
+ rule_ds_rule_government_nudge:0 "Death Stare Government AI Nudge"
+ setting_ds_rule_government_nudge_on:0 "On"
+ setting_ds_rule_government_nudge_on_desc:0 "Cowed vassals are strongly nudged to take eligible liege-convert government decisions themselves. Blocks achievements."
+ setting_ds_rule_government_nudge_off:0 "Off"
+ setting_ds_rule_government_nudge_off_desc:0 "No AI will_do boost on government convert decisions."

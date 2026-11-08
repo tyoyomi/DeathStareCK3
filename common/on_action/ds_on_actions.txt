@@ -1,0 +1,18 @@
+# Death Stare — append-only cleanup
+
+on_death = {
+	on_actions = { ds_on_death }
+}
+
+ds_on_death = {
+	trigger = {
+		OR = {
+			has_character_modifier = ds_cowed_modifier
+			exists = var:ds_cowed_by
+			has_character_flag = ds_is_cowed
+		}
+	}
+	effect = {
+		ds_clear_cowed_effect = yes
+	}
+}

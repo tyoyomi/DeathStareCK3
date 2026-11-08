@@ -1,0 +1,182 @@
+# Death Stare — triggers
+
+### Targeting
+
+ds_actor_is_player_trigger = {
+	scope:actor = {
+		is_alive = yes
+		is_ai = no
+	}
+}
+
+ds_recipient_valid_base_trigger = {
+	scope:recipient = {
+		is_alive = yes
+		is_adult = yes
+		NOT = { this = scope:actor }
+	}
+}
+
+# Default: direct landed vassal of actor
+ds_recipient_is_direct_vassal_trigger = {
+	scope:recipient = {
+		is_landed = yes
+		is_vassal_of = scope:actor
+	}
+}
+
+# Wider rule: any character in actor's realm
+ds_recipient_in_actor_realm_trigger = {
+	scope:recipient = {
+		OR = {
+			is_vassal_or_below_of = scope:actor
+			is_courtier_of = scope:actor
+			AND = {
+				exists = liege
+				liege = {
+					OR = {
+						this = scope:actor
+						is_vassal_or_below_of = scope:actor
+					}
+				}
+			}
+		}
+	}
+}
+
+ds_stare_target_allowed_trigger = {
+	ds_recipient_valid_base_trigger = yes
+	trigger_if = {
+		limit = { has_game_rule = ds_rule_target_realm }
+		ds_recipient_in_actor_realm_trigger = yes
+	}
+	trigger_else = {
+		ds_recipient_is_direct_vassal_trigger = yes
+	}
+}
+
+### Directed cowed
+
+ds_character_is_cowed_trigger = {
+	has_character_modifier = ds_cowed_modifier
+	exists = var:ds_cowed_by
+}
+
+# this = intimidated character; COMPARE = intimidator character
+ds_cowed_by_character_trigger = {
+	ds_character_is_cowed_trigger = yes
+	var:ds_cowed_by = $COMPARE$
+}
+
+ds_recipient_cowed_by_actor_trigger = {
+	scope:recipient = {
+		ds_character_is_cowed_trigger = yes
+		var:ds_cowed_by = scope:actor
+	}
+}
+
+ds_recipient_cowed_by_puppet_or_actor_trigger = {
+	scope:recipient = {
+		ds_character_is_cowed_trigger = yes
+		OR = {
+			var:ds_cowed_by = scope:actor
+			AND = {
+				exists = scope:puppet_or_actor
+				var:ds_cowed_by = scope:puppet_or_actor
+			}
+		}
+	}
+}
+
+# Shared auto_accept / ai_accept gate used by curated LIOS patches
+ds_cowed_auto_accept_trigger = {
+	ds_recipient_cowed_by_puppet_or_actor_trigger = yes
+}
+
+### Government force validity (recipient this / scoped)
+
+ds_recipient_can_force_feudal_from_tribal_trigger = {
+	scope:recipient = {
+		government_has_flag = government_is_tribal
+		liege ?= {
+			OR = {
+				government_has_flag = government_is_feudal
+				government_has_flag = government_is_clan
+				government_has_flag = government_is_japan_feudal
+			}
+		}
+		OR = {
+			has_realm_law = tribal_authority_1
+			has_realm_law = tribal_authority_2
+			has_realm_law = tribal_authority_3
+		}
+		faith = { NOT = { has_doctrine_parameter = unreformed } }
+		NOT = { has_character_flag = just_converted_to_tribalism }
+		NOT = { culture = { has_cultural_parameter = permafrost_cannot_become_feudal } }
+	}
+}
+
+ds_recipient_can_force_clan_to_feudal_trigger = {
+	scope:recipient = {
+		government_has_flag = government_is_clan
+		top_liege != this
+		liege ?= {
+			government_has_flag = government_is_feudal
+		}
+		OR = {
+			religion = liege.religion
+			faith = {
+				faith_hostility_level = {
+					target = liege.faith
+					value <= faith_fully_accepted_level
+				}
+			}
+		}
+		OR = {
+			culture = liege.culture
+			culture = {
+				cultural_acceptance = { target = liege.culture value >= 90 }
+			}
+		}
+	}
+}
+
+ds_recipient_can_force_feudal_to_clan_trigger = {
+	scope:recipient = {
+		government_has_flag = government_is_feudal
+		top_liege != this
+		liege ?= {
+			government_has_flag = government_is_clan
+		}
+		OR = {
+			religion = liege.religion
+			faith = {
+				faith_hostility_level = {
+					target = liege.faith
+					value <= faith_fully_accepted_level
+				}
+			}
+		}
+		OR = {
+			culture = liege.culture
+			culture = {
+				cultural_acceptance = { target = liege.culture value >= 90 }
+			}
+		}
+	}
+}
+
+ds_recipient_eligible_government_force_trigger = {
+	OR = {
+		ds_recipient_can_force_feudal_from_tribal_trigger = yes
+		ds_recipient_can_force_clan_to_feudal_trigger = yes
+		ds_recipient_can_force_feudal_to_clan_trigger = yes
+	}
+}
+
+# AI nudge: this = vassal deciding; cowed by their liege
+ds_cowed_by_liege_trigger = {
+	ds_character_is_cowed_trigger = yes
+	exists = liege
+	var:ds_cowed_by = liege
+}

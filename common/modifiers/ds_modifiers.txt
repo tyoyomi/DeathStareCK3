@@ -1,0 +1,7 @@
+# Death Stare — timed Yes Man modifier on the stared target
+
+ds_cowed_modifier = {
+	icon = ds_cowed_modifier
+	# Flavor only — acceptance is scripted via auto_accept / ai_accept packs
+	dread_baseline_add = 5
+}

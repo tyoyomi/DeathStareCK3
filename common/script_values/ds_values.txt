@@ -1,0 +1,13 @@
+# Death Stare — balance values
+
+@ds_cowed_duration_years = 2
+@ds_stare_global_cooldown_days = 30
+@ds_cowed_fear_opinion = -10
+@ds_cowed_ai_accept_bonus = 1000
+@ds_gov_nudge_ai_will_do = 1000
+
+ds_cowed_duration_years = @ds_cowed_duration_years
+ds_stare_global_cooldown_days = @ds_stare_global_cooldown_days
+ds_cowed_fear_opinion = @ds_cowed_fear_opinion
+ds_cowed_ai_accept_bonus = @ds_cowed_ai_accept_bonus
+ds_gov_nudge_ai_will_do = @ds_gov_nudge_ai_will_do
